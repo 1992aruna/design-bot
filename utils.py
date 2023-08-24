@@ -26,25 +26,3 @@ design_list_reply_buttons=[
                                 ]
                                 }
         ]
-name_list=[
-          {
-                                "title": "Select Any One option",
-                                "rows": [
-                                    {
-                                    "title": "Rose"
-                                    },
-                                    {
-                                    "title": "Lily"
-                                    },
-                                    {
-                                    "title": "Tulip"
-                                    },
-                                    {
-                                    "title": "Sunflower"
-                                    },
-                                    {
-                                    "title": "Marigold"
-                                    }
-                                ]
-                                }
-        ]

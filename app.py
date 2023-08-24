@@ -38,7 +38,7 @@ fs = gridfs.GridFS(mongo.db, collection = "files")
 structure={
             "design_type":"", 
             "design_list":"",
-            "name_list":"",
+            "name":"",
             # "size":"",
             # "images":{
             #     "front":{"id":"","text":""},
@@ -102,10 +102,10 @@ def whatsapp_webhook():
                         
 
                         if text=="Chat":
-                          send_list(number, text)
+                          send_list(number, "Kindly Select From the List", design_list_reply_buttons)
 
                         else:
-                           send_list(number, text)  
+                           send_list(number, "Kindly Select From the List", design_list_reply_buttons)  
 
                         send_reply_button(number, "Choose from above chat",design_list_reply_buttons)
                         
@@ -123,33 +123,33 @@ def whatsapp_webhook():
                                 raise Exception
                          
                          old_user={"$set":{"state":"name",f"order_details.detail{record['order_count']}.design_list":text}}
-                         db.update_one({'_id':number},old_user)
-                         send_list(number,"What is your name", name_list)
+                         db.update_one({'_id': number}, old_user)
+
+                         send_message(number,"What is your name")
 
                     except:
                          send_list(number,"Please enter a valid input\n\nKindly Select the design_list", design_list_reply_buttons)
 
                 
-                elif state=="name_list":
-                    try: 
-                         if text not in ["Rose","Lily","Tulip","Sunflower","Marigold"] :
-                                raise Exception
-                         
-                         old_user={"$set":{"state":"end",f"order_details.detail{record['order_count']}.name_list":text}}
-                         db.update_one({'_id':number},old_user)
-                         
+                elif state == "name":
+                    try:
+                        if len(text) < 2:
+                            raise Exception
+                        old_user = {
+                            "$set": {"state": "end", f"order_details.detail{record['order_count']}.name": text}}
+                        db.update_one({'_id': number}, old_user)
 
-                    except :
-                         send_list(number,"Please enter a valid input\n\nPlease Select the name", name_list)
-                
-                            
+
+                    except:
+                        send_list(number, "Choose from above list", design_list_reply_buttons)                            
                 elif  state=="end":
                     
                             order_count = record["order_count"]+1
                             old_user={"$set":{"state":"start","order_count": order_count,f"order_details.detail{order_count}":structure}}
                             db.update_one({'_id':number},old_user)
 
-                            send_reply_button(number, "Welcome to Inkpen Designs. What do you wanna chat ?\n",design_type_reply_buttons)
+                            send_reply_button(number, "Welcome to Inkpen Designs. What do you wanna chat ?\n",
+                                              design_type_reply_buttons)
                         
                     
                     
